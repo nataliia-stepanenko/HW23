@@ -10,7 +10,7 @@ const ImagesList = () => {
         fetch(`https://picsum.photos/v2/list?page=${page}&limit=10`)
             .then((response) => response.json())
             .then((result) => {
-                setPhotos(prevState => prevState.concat(result));
+                setPhotos(prevState => [...prevState, ...result]);
                 setLoading(false);
             });
     }, [page]);
@@ -19,15 +19,6 @@ const ImagesList = () => {
         setPage((prevPage) => prevPage + 1);
     };
 
-    if (isLoading) {
-        return (
-        <>
-            <div className="container">
-                <p className="loader">Loading...</p>
-            </div>
-        </>
-    )}
-
     return (
         <>
             <div className="container">
@@ -35,11 +26,11 @@ const ImagesList = () => {
                 <ul>
                     {photos.map(({id, download_url}) => (
                         <li key={id}>
-                        <img src={download_url} alt={id} className="image"></img>
+                        <img src={download_url} alt={id} className="image"/>
                         </li>
                     ))}
                 </ul>
-                <button onClick={handleShowMore}>Show more</button>
+                {isLoading ? <p className="loader">Loading...</p> : <button onClick={handleShowMore}>Show more</button>}                
             </div>
         </>
     )
